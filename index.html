@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KLING CAR — Veículos premium</title>
+  <meta name="description" content="KLING CAR: curadoria de veículos premium e esportivos. Aston Martin, BMW M, Ferrari, Mercedes-AMG, Lamborghini e Porsche.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Barra de aviso -->
+  <div class="announce">
+    Quer saber as novidades do estoque? <a href="#contato">Receba atualizações da Kling Car</a>.
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="header" id="topo">
+    <nav class="nav nav--left" aria-label="Principal">
+      <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span>
+      </button>
+      <a href="#showroom">Showroom</a>
+      <a href="#estoque">Estoque</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="#topo" class="logo" aria-label="KLING CAR — início">KLING&nbsp;CAR</a>
+    <div class="nav nav--right">
+      <a href="#contato" class="btn btn--accent btn--sm">Test drive</a>
+      <a href="#contato" class="nav-link-hide">Entrar</a>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <a href="#showroom">Showroom</a>
+    <a href="#estoque">Estoque</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="#contato">Contato</a>
+  </div>
+
+  <main>
+    <!-- HERO + SHOWROOM 3D -->
+    <section class="hero" id="showroom" aria-roledescription="carrossel" aria-label="Showroom Kling Car">
+      <div class="hero__intro">
+        <p class="eyebrow">Showroom 2026 · São Paulo</p>
+        <h1 class="hero__title">Dirija o<br>extraordinário.</h1>
+      </div>
+
+      <div class="stage" id="stage">
+        <!-- Nome gigante atrás do carro -->
+        <div class="bigname" aria-hidden="true"><span id="bigname">VANQUISH</span></div>
+
+        <!-- Linhas de velocidade -->
+        <div class="speedlines" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+
+        <!-- Plataforma giratória -->
+        <div class="turntable" aria-hidden="true"><div class="turntable__disc"></div></div>
+
+        <!-- Anel 3D com os carros (preenchido via JS) -->
+        <div class="ring-viewport">
+          <div class="ring" id="ring"></div>
+        </div>
+
+        <button class="arrow arrow--prev" id="prev" aria-label="Carro anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="arrow arrow--next" id="next" aria-label="Próximo carro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="info" id="info" aria-live="polite">
+        <p class="info__brand" id="info-brand">Aston Martin</p>
+        <h2 class="info__tagline" id="info-tagline">Grand tourer V12 com alma britânica.</h2>
+        <ul class="specs" id="info-specs"></ul>
+        <div class="info__cta">
+          <a href="#estoque" class="btn btn--dark">Explorar</a>
+          <a href="#contato" class="btn btn--light">Agendar test drive</a>
+        </div>
+      </div>
+
+      <div class="dots" id="dots" role="tablist" aria-label="Escolher carro"></div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section class="features" id="diferenciais">
+      <h2 class="section-title">Carros de exceção,<br>atendimento à altura.</h2>
+
+      <div class="tabs" role="tablist" aria-label="Diferenciais">
+        <button role="tab" class="tab" aria-selected="false" data-tab="curadoria">Curadoria</button>
+        <button role="tab" class="tab is-active" aria-selected="true" data-tab="performance">Performance</button>
+        <button role="tab" class="tab" aria-selected="false" data-tab="experiencia">Experiência</button>
+      </div>
+
+      <div class="cards" id="feature-cards">
+        <!-- preenchido via JS -->
+      </div>
+    </section>
+
+    <!-- ESTOQUE -->
+    <section class="stock" id="estoque">
+      <div class="stock__head">
+        <h2 class="section-title section-title--left">Estoque em destaque</h2>
+        <p class="muted">Todos os veículos com procedência verificada, laudo cautelar e garantia Kling Car.</p>
+      </div>
+      <div class="grid" id="grid"><!-- preenchido via JS --></div>
+    </section>
+
+    <!-- NÚMEROS -->
+    <section class="stats">
+      <div class="stat"><strong data-count="1200">0</strong><span>veículos entregues</span></div>
+      <div class="stat"><strong data-count="18">0</strong><span>anos de mercado</span></div>
+      <div class="stat"><strong data-count="98" data-suffix="%">0</strong><span>clientes recomendam</span></div>
+      <div class="stat"><strong data-count="24" data-suffix="h">0</strong><span>para aprovar crédito</span></div>
+    </section>
+
+    <!-- CONTATO -->
+    <section class="contact" id="contato">
+      <div class="contact__text">
+        <p class="eyebrow eyebrow--light">Test drive</p>
+        <h2>Sinta na estrada<br>antes de decidir.</h2>
+        <p>Agende uma visita ao showroom ou receba o carro para um test drive no seu endereço. Um consultor Kling Car entra em contato em até 1 hora útil.</p>
+      </div>
+      <form class="form" id="form" novalidate>
+        <label>Nome
+          <input name="nome" type="text" autocomplete="name" required placeholder="Seu nome">
+        </label>
+        <label>Telefone / WhatsApp
+          <input name="telefone" type="tel" autocomplete="tel" required placeholder="(11) 90000-0000">
+        </label>
+        <label>Modelo de interesse
+          <select name="modelo" id="form-model"></select>
+        </label>
+        <button class="btn btn--accent btn--block" type="submit">Agendar test drive</button>
+        <p class="form__msg" id="form-msg" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__top">
+      <span class="logo logo--footer">KLING&nbsp;CAR</span>
+      <nav aria-label="Rodapé">
+        <a href="#showroom">Showroom</a>
+        <a href="#estoque">Estoque</a>
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+    <p class="footer__legal">© <span id="year"></span> Kling Car. Imagens meramente ilustrativas. Especificações de fábrica podem variar conforme versão e ano-modelo.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
