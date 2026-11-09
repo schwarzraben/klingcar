@@ -219,7 +219,7 @@ button { font: inherit; cursor: pointer; }
   opacity: 0;
 }
 .slot.is-active { opacity: 1; }
-.slot.is-near { opacity: .32; filter: saturate(.2) blur(1px); }
+.slot.is-near { opacity: 0; }
 .car {
   position: absolute; inset: 0;
   display: flex; align-items: flex-end; justify-content: center;
