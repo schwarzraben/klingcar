@@ -14,12 +14,16 @@ python3 -m http.server 8000
 
 ## Showroom animado
 
-Os 6 carros ficam num anel 3D (plataforma giratória). A cada 5 s (ou pelas setas, pontos,
-teclado ← → e arrastar no celular):
+A cada 5 s (ou pelas setas, pontos, teclado ← → e arrastar no celular) os carros trocam
+**dirigindo**:
 
-1. **o carro se mexe** — arranca para frente com "agachada" da traseira, desfoque e linhas de velocidade;
-2. **a plataforma gira** 60° e traz o próximo carro, enquanto o nome gigante sai e o novo entra;
-3. **o novo carro chega** e assenta na suspensão.
+1. o carro atual acelera e sai pela lateral, com a traseira "agachando", desfoque de movimento,
+   linhas de velocidade e as **rodas girando** na proporção da distância percorrida;
+2. o próximo carro entra pelo outro lado e **freia** no centro, com a frente mergulhando na
+   suspensão; voltando (seta ←), os carros andam de ré.
+
+As rodas são recortes da própria foto (posições em `wheels` no `script.js`) que giram por cima
+do carro.
 
 **Por dentro (raio-X):** ao passar o mouse sobre o carro (ou tocar nele no celular), a carroceria
 se abre sobre o motor e a cabine, mostrando um desenho do motor e dos bancos em laranja com

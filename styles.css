@@ -207,18 +207,14 @@ button { font: inherit; cursor: pointer; }
   width: var(--slot-w); height: var(--slot-h);
   margin-left: calc(var(--slot-w) / -2);
   transform-style: preserve-3d;
-  transform: translateZ(calc(var(--radius-ring) * -1)) rotateY(0deg);
-  transition: transform 1.2s var(--ease-spin);
 }
 .slot {
   position: absolute; inset: 0;
   transform-style: preserve-3d;
-  transform: rotateY(var(--a)) translateZ(var(--radius-ring));
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  transition: opacity .9s, filter .9s;
+  transition: opacity .2s;
   opacity: 0;
 }
-.slot.is-active { opacity: 1; }
+.slot.is-active, .slot.slot.is-leaving { opacity: 1; }
 .slot.is-near { opacity: 0; }
 .car {
   position: absolute; inset: 0;
@@ -263,6 +259,11 @@ button { font: inherit; cursor: pointer; }
 .xr-ambient{ fill: none; stroke: #ffb21a; stroke-width: 1.2; }
 .xr-wheel  { fill: none; stroke: #ff8a2a; stroke-width: 2.2; }
 .xr-floor  { stroke: #ff8a2a; stroke-width: .8; stroke-dasharray: 3 3; opacity: .7; }
+
+/* rodas que giram quando o carro anda */
+.frame { transform-origin: 50% 92%; }
+.wheel { position: absolute; border-radius: 50%; overflow: hidden; pointer-events: none; z-index: 2; }
+.wheel__in { position: absolute; inset: 0; background-repeat: no-repeat; will-change: transform; }
 
 /* foto do carro com os recortes que abrem sobre o motor e a cabine */
 .frame__body {

@@ -12,6 +12,7 @@
     {
       id: "aston-martin", brand: "Aston Martin", model: "Vanquish", big: "VANQUISH",
       img: "assets/cars/aston-martin.webp",
+      wheels: [[126, 142, 49, 49], [551, 142, 49, 49]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "630 Nm", gearbox: "Automático de 8 marchas", drive: "Traseira",
       xray: { size: [684, 196], engine: [45, 52, 200, 58], cabin: [285, 28, 170, 95], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "Couro semi-anilina, 2+2 lugares",
@@ -22,6 +23,7 @@
     {
       id: "bmw-m4", brand: "BMW M", model: "M4 Competition", big: "M4",
       img: "assets/cars/bmw-m4.webp",
+      wheels: [[395, 228, 33, 55], [608, 198, 16, 49]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "650 Nm", gearbox: "Automático M Steptronic de 8 marchas", drive: "Traseira",
       xray: { size: [640, 314], engine: [85, 95, 300, 60], cabin: [250, 25, 210, 85], cyl: 6, turbo: true, rear: false, rearSeats: true },
       interior: "Bancos concha M Carbon",
@@ -32,6 +34,7 @@
     {
       id: "ferrari-purosangue", brand: "Ferrari", model: "Purosangue", big: "PUROSANGUE",
       img: "assets/cars/ferrari-purosangue.webp",
+      wheels: [[106, 135, 39, 39], [440, 135, 39, 39]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "716 Nm", gearbox: "Dupla embreagem de 8 marchas", drive: "Integral",
       xray: { size: [568, 175], engine: [30, 55, 190, 52], cabin: [225, 22, 220, 90], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "4 bancos individuais em couro",
@@ -42,6 +45,7 @@
     {
       id: "mercedes-g63", brand: "Mercedes-AMG", model: "G 63", big: "G 63",
       img: "assets/cars/mercedes-g63.webp",
+      wheels: [[113, 220, 50, 50], [497, 220, 51, 51]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "850 Nm", gearbox: "Automático AMG Speedshift de 9 marchas", drive: "Integral 4MATIC",
       xray: { size: [618, 277], engine: [25, 100, 180, 60], cabin: [215, 35, 330, 115], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro Nappa AMG, 5 lugares",
@@ -52,6 +56,7 @@
     {
       id: "lamborghini-urus", brand: "Lamborghini", model: "Urus", big: "URUS",
       img: "assets/cars/lamborghini-urus.webp",
+      wheels: [[386, 245, 41, 57], [577, 210, 19, 51]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "850 Nm", gearbox: "Automático de 8 marchas", drive: "Integral",
       xray: { size: [604, 318], engine: [60, 75, 300, 70], cabin: [190, 15, 300, 95], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro e Alcantara, 4 lugares",
@@ -62,6 +67,7 @@
     {
       id: "porsche-gt3", brand: "Porsche", model: "911 GT3", big: "GT3",
       img: "assets/cars/porsche-gt3.webp",
+      wheels: [[135, 152, 46, 46], [517, 152, 46, 46]], // [centroX, centroY, raioX, raioY] em px da foto
       torque: "470 Nm", gearbox: "PDK de dupla embreagem, 7 marchas", drive: "Traseira",
       xray: { size: [652, 201], engine: [455, 58, 165, 62], cabin: [225, 25, 240, 90], cyl: 6, turbo: false, rear: true, rearSeats: false },
       interior: "Bancos full bucket em carbono",
@@ -80,7 +86,6 @@
   const $ = (s, r = document) => r.querySelector(s);
   const stage = $("#stage");
   const ring = $("#ring");
-  const disc = $(".turntable__disc");
   const bigname = $("#bigname");
   const info = $("#info");
   const dotsEl = $("#dots");
@@ -135,6 +140,14 @@
       <line x1="${x + w * 0.05}" y1="${y + h * 0.97}" x2="${x + w * 0.98}" y2="${y + h * 0.97}" class="xr-floor"/>`;
   }
 
+  // rodas recortadas da própria foto, para girarem quando o carro anda
+  function wheelsHTML(car, W, H) {
+    return car.wheels.map(([cx, cy, rx, ry]) => `
+        <div class="wheel" style="left:${pct(cx - rx, W)};top:${pct(cy - ry, H)};width:${pct(2 * rx, W)};height:${pct(2 * ry, H)}">
+          <div class="wheel__in" data-k="${(rx / ry).toFixed(4)}" style="background-image:url(${car.img});background-size:${((W / (2 * rx)) * 100).toFixed(3)}% ${((H / (2 * ry)) * 100).toFixed(3)}%;background-position:${(((cx - rx) / (W - 2 * rx)) * 100).toFixed(3)}% ${(((cy - ry) / (H - 2 * ry)) * 100).toFixed(3)}%"></div>
+        </div>`).join("");
+  }
+
   function xrayFrame(car, i) {
     const { size: [W, H], engine: e, cabin: c } = car.xray;
     const hole = (b, sx, sy) => ({
@@ -157,6 +170,7 @@
           <g class="xr-cabin">${cabinSVG(c, car.xray).replace(/#xrGlowWarm/g, `#xrGlowWarm${i}`)}</g>
         </svg>
         <img class="frame__body" src="${car.img}" alt="${car.brand} ${car.model}" draggable="false" ${i > 1 ? 'loading="lazy"' : ""}>
+        ${typeof i === "number" ? wheelsHTML(car, W, H) : ""}
         <div class="pin pin--engine" style="left:${he.cx};top:${pct(e[1], H)}"><i></i><span><b>Motor${car.xray.rear ? " traseiro" : ""}</b>${engineName} · ${car.specs[1][1]}</span></div>
         <div class="pin pin--cabin" style="left:${hc.cx};top:${pct(c[1], H)}"><i></i><span><b>Interior</b>${car.interior}</span></div>
       </div>`;
@@ -209,7 +223,6 @@
 
   /* ---------- Estado ---------- */
   let index = 0;
-  let angle = 0;       // ângulo acumulado do anel (gira sempre no mesmo sentido)
   let busy = false;
   let timer = null;
   let paused = false;
@@ -244,6 +257,49 @@
   const carEl = (i) => slots[i].querySelector(".car");
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  function swapTexts() {
+    paintInfo();
+    bigname.classList.remove("is-out");
+    bigname.classList.add("is-in-start");
+    void bigname.offsetWidth;
+    bigname.classList.remove("is-in-start");
+    info.classList.remove("is-hidden");
+  }
+
+  /* Faz um carro andar de x0 até x1 (px): carroceria desliza, rodas giram
+     na mesma proporção do deslocamento e a suspensão reage.
+     phase "out" = acelerando (traseira agacha); "in" = freando (frente mergulha). */
+  function drive(car, x0, x1, duration, easing, phase, sgn) {
+    const opts = { duration, easing, fill: "forwards" };
+    const anims = [];
+    const blur = phase === "out" ? ["blur(0px)", "blur(.6px)", "blur(2.5px)"] : ["blur(2.5px)", "blur(.8px)", "blur(0px)"];
+    anims.push(car.animate([
+      { transform: `translateX(${x0}px)`, filter: blur[0] },
+      { filter: blur[1], offset: 0.5 },
+      { transform: `translateX(${x1}px)`, filter: blur[2] },
+    ], opts));
+
+    // suspensão (o carro olha para a esquerda: rotação positiva levanta o bico)
+    const frame = car.querySelector(".frame");
+    const pitch = phase === "out"
+      ? [0, -sgn * 1.1, -sgn * 0.5, 0].map((a, k) => ({ transform: `rotate(${a}deg)`, offset: [0, 0.22, 0.55, 1][k] }))
+      : [0, 0, sgn * 1.0, -sgn * 0.35, 0].map((a, k) => ({ transform: `rotate(${a}deg)`, offset: [0, 0.7, 0.86, 0.94, 1][k] }));
+    anims.push(frame.animate(pitch, { duration, easing: "ease-in-out" }));
+
+    // rodas: ângulo = distância / raio (rolando sem deslizar)
+    car.querySelectorAll(".wheel__in").forEach((w) => {
+      const k = parseFloat(w.dataset.k);
+      const r = w.offsetHeight / 2 || 1;
+      const deg = ((x1 - x0) / r) * (180 / Math.PI);
+      const t = (a) => `scaleX(${k}) rotate(${a}deg) scaleX(${1 / k})`;
+      anims.push(w.animate([
+        { transform: t(0), filter: phase === "out" ? "blur(0px)" : "blur(1.5px)" },
+        { transform: t(deg), filter: phase === "out" ? "blur(1.5px)" : "blur(0px)" },
+      ], opts));
+    });
+    return anims;
+  }
+
   async function goTo(target, dirHint) {
     target = mod(target, CARS.length);
     if (busy || target === index) return;
@@ -260,64 +316,45 @@
     const from = index;
     const oldCar = carEl(from);
 
-    // 1) o carro se mexe -------------------------------------------
+    const newCar = carEl(target);
+    const oldSlot = slots[from];
+
     info.classList.add("is-hidden");
     bigname.classList.add("is-out");
-    let driveAnim = null;
-    if (!reduceMotion) {
+
+    if (reduceMotion) {
+      index = target;
+      paintSlots();
+      await wait(50);
+      swapTexts();
+    } else {
+      // 1) o carro atual acelera e sai dirigindo pela lateral ------------
       if (dir > 0) stage.classList.add("is-moving");
-      const x = dir > 0 ? -14 : 14;
-      driveAnim = oldCar.animate(
-        [
-          { transform: "translateX(0) rotate(0deg)", filter: "blur(0)" },
-          { transform: `translateX(${-x * 0.06}%) rotate(${dir * 0.6}deg)`, offset: 0.18 }, // traseira "agacha"
-          { transform: `translateX(${x}%) rotate(${-dir * 0.3}deg)`, filter: "blur(1.5px)" },
-        ],
-        { duration: DRIVE_MS, easing: "cubic-bezier(.55,0,.9,.45)", fill: "forwards" }
-      );
-      await wait(DRIVE_MS * 0.82);
-    }
+      const sgn = dir > 0 ? -1 : 1; // para frente = para a esquerda (os carros olham para a esquerda); para trás = de ré
+      const dist = window.innerWidth / 2 + oldCar.querySelector(".frame").offsetWidth / 2 + 80;
+      const OUT = 950, IN = 1400, OVERLAP = 150;
 
-    // 2) a plataforma gira -----------------------------------------
-    index = target;
-    angle -= steps * STEP;
-    ring.style.transform = `translateZ(calc(var(--radius-ring) * -1)) rotateY(${angle}deg)`;
-    disc.style.transform = `rotate(${-angle * 1.5}deg)`;
-    paintSlots();
+      oldSlot.classList.add("is-leaving");
+      const outAnims = drive(oldCar, 0, sgn * dist, OUT, "cubic-bezier(.45,0,.85,.35)", "out", sgn);
+      await wait(OUT - OVERLAP);
 
-    // devolve o carro antigo à posição de origem, suavemente, enquanto sai de cena
-    if (driveAnim) {
-      const back = oldCar.animate(
-        [{ transform: getComputedStyle(oldCar).transform, filter: "blur(1.5px)" }, { transform: "none", filter: "blur(0)" }],
-        { duration: SPIN_MS, easing: "cubic-bezier(.16,1,.3,1)" }
-      );
-      driveAnim.cancel();
-      back.onfinish = () => back.cancel();
-    }
+      // 2) o próximo entra dirigindo pelo outro lado e freia no centro ---
+      index = target;
+      paintSlots();
+      const inAnims = drive(newCar, -sgn * (window.innerWidth / 2 + newCar.querySelector(".frame").offsetWidth / 2 + 80), 0, IN, "cubic-bezier(.1,.5,.2,1)", "in", sgn);
+      await wait(OVERLAP);
+      // esconde o carro que saiu antes de devolvê-lo ao centro (sem "fantasma")
+      oldSlot.style.transition = "none";
+      oldSlot.classList.remove("is-leaving");
+      void oldSlot.offsetWidth;
+      outAnims.forEach((an) => an.cancel());
+      requestAnimationFrame(() => { oldSlot.style.transition = ""; });
+      stage.classList.remove("is-moving");
 
-    await wait(reduceMotion ? 50 : SPIN_MS * 0.55);
-
-    // 3) o novo carro chega e assenta -------------------------------
-    paintInfo();
-    bigname.classList.remove("is-out");
-    bigname.classList.add("is-in-start");
-    void bigname.offsetWidth;
-    bigname.classList.remove("is-in-start");
-    info.classList.remove("is-hidden");
-    stage.classList.remove("is-moving");
-
-    if (!reduceMotion) {
-      const s = dir > 0 ? 1 : -1;
-      carEl(index).animate(
-        [
-          { transform: `translateX(${s * 6}%)`, filter: "blur(1px)" },
-          { transform: `translateX(${-s * 1.2}%) rotate(${-s * 0.5}deg)`, filter: "blur(0)", offset: 0.55 },
-          { transform: `translateX(${s * 0.3}%) rotate(${s * 0.2}deg)`, offset: 0.78 },
-          { transform: "translateX(0) rotate(0deg)" },
-        ],
-        { duration: 900, easing: "cubic-bezier(.16,1,.3,1)" }
-      );
-      await wait(SPIN_MS * 0.45);
+      await wait(IN * 0.45 - OVERLAP);
+      swapTexts();
+      await wait(IN * 0.55);
+      inAnims.forEach((an) => an.cancel());
     }
 
     busy = false;
