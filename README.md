@@ -27,6 +27,11 @@ etiquetas da ficha técnica. O menu ao lado (Visão geral / Motor / Interior) fi
 pausa a troca automática. As posições do motor e da cabine de cada foto ficam em `xray` no
 `script.js`.
 
+**Ficha completa:** clicar num card do estoque (ou em "Explorar" no showroom) abre a ficha do
+carro: galeria com vistas Exterior / Motor / Interior, ficha técnica completa (motor, potência,
+torque, câmbio, tração, 0–100, velocidade máxima, carroceria, ano-modelo, interior) e botões para
+agendar test drive ou ver o carro no showroom. As setas da ficha passam para o próximo carro.
+
 O autoplay pausa com o mouse sobre o showroom, com a aba oculta ou fora da tela, e respeita
 `prefers-reduced-motion`.
 

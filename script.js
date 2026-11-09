@@ -12,6 +12,7 @@
     {
       id: "aston-martin", brand: "Aston Martin", model: "Vanquish", big: "VANQUISH",
       img: "assets/cars/aston-martin.webp",
+      torque: "630 Nm", gearbox: "Automático de 8 marchas", drive: "Traseira",
       xray: { size: [684, 196], engine: [45, 52, 200, 58], cabin: [285, 28, 170, 95], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "Couro semi-anilina, 2+2 lugares",
       tagline: "Grand tourer V12 com alma britânica.",
@@ -21,6 +22,7 @@
     {
       id: "bmw-m4", brand: "BMW M", model: "M4 Competition", big: "M4",
       img: "assets/cars/bmw-m4.webp",
+      torque: "650 Nm", gearbox: "Automático M Steptronic de 8 marchas", drive: "Traseira",
       xray: { size: [640, 314], engine: [85, 95, 300, 60], cabin: [250, 25, 210, 85], cyl: 6, turbo: true, rear: false, rearSeats: true },
       interior: "Bancos concha M Carbon",
       tagline: "Precisão de pista para o dia a dia.",
@@ -30,6 +32,7 @@
     {
       id: "ferrari-purosangue", brand: "Ferrari", model: "Purosangue", big: "PUROSANGUE",
       img: "assets/cars/ferrari-purosangue.webp",
+      torque: "716 Nm", gearbox: "Dupla embreagem de 8 marchas", drive: "Integral",
       xray: { size: [568, 175], engine: [30, 55, 190, 52], cabin: [225, 22, 220, 90], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "4 bancos individuais em couro",
       tagline: "Quatro portas, quatro lugares, um V12 aspirado.",
@@ -39,6 +42,7 @@
     {
       id: "mercedes-g63", brand: "Mercedes-AMG", model: "G 63", big: "G 63",
       img: "assets/cars/mercedes-g63.webp",
+      torque: "850 Nm", gearbox: "Automático AMG Speedshift de 9 marchas", drive: "Integral 4MATIC",
       xray: { size: [618, 277], engine: [25, 100, 180, 60], cabin: [215, 35, 330, 115], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro Nappa AMG, 5 lugares",
       tagline: "O ícone off-road com força AMG.",
@@ -48,6 +52,7 @@
     {
       id: "lamborghini-urus", brand: "Lamborghini", model: "Urus", big: "URUS",
       img: "assets/cars/lamborghini-urus.webp",
+      torque: "850 Nm", gearbox: "Automático de 8 marchas", drive: "Integral",
       xray: { size: [604, 318], engine: [60, 75, 300, 70], cabin: [190, 15, 300, 95], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro e Alcantara, 4 lugares",
       tagline: "O primeiro Super SUV do mundo.",
@@ -57,6 +62,7 @@
     {
       id: "porsche-gt3", brand: "Porsche", model: "911 GT3", big: "GT3",
       img: "assets/cars/porsche-gt3.webp",
+      torque: "470 Nm", gearbox: "PDK de dupla embreagem, 7 marchas", drive: "Traseira",
       xray: { size: [652, 201], engine: [455, 58, 165, 62], cabin: [225, 25, 240, 90], cyl: 6, turbo: false, rear: true, rearSeats: false },
       interior: "Bancos full bucket em carbono",
       tagline: "Nascido no autódromo, homologado para a rua.",
@@ -191,7 +197,7 @@
     root.setProperty("--slot-h", `${h}px`);
     root.setProperty("--radius-ring", `${r}px`);
     // encaixa cada foto no slot mantendo a proporção (as camadas do raio-X usam o mesmo quadro)
-    document.querySelectorAll(".frame").forEach((f) => {
+    ring.querySelectorAll(".frame").forEach((f) => {
       const ar = parseFloat(f.style.getPropertyValue("--ar"));
       const fw = Math.min(w, h * ar);
       f.style.width = `${fw}px`;
@@ -451,12 +457,13 @@
      Estoque
      ========================================================= */
   const grid = $("#grid");
-  grid.innerHTML = CARS.map((c) => `
-    <article class="tile">
+  grid.innerHTML = CARS.map((c, i) => `
+    <article class="tile" data-car="${i}">
       <div class="tile__img"><img src="${c.img}" alt="${c.brand} ${c.model}" loading="lazy"></div>
       <span class="tile__brand">${c.brand}</span>
       <h3 class="tile__name">${c.model}</h3>
       <span class="tile__meta">${c.body} · ${c.year} · ${c.specs[1][1]}</span>
+      <button type="button" class="tile__details" data-open="${i}">Ver ficha completa e fotos</button>
       <div class="tile__foot">
         <span class="tile__tag">Sob consulta</span>
         <a class="tile__link" href="#contato" data-model="${c.brand} ${c.model}">Tenho interesse →</a>
@@ -472,6 +479,127 @@
     });
   }, { threshold: 0.15 });
   [...grid.children].forEach((t) => io.observe(t));
+
+
+  /* =========================================================
+     Ficha completa do carro (abre ao clicar no card do estoque)
+     ========================================================= */
+  const dlg = $("#detail");
+  const dBody = $("#detail-body");
+  let dIndex = 0;
+  let dView = "exterior";
+
+  function renderDetail() {
+    const c = CARS[dIndex];
+    const [motor, pot, acel, last] = c.specs;
+    const rows = [
+      ["Motor", motor[1] + (c.xray.rear ? " (traseiro)" : " (dianteiro)")],
+      ["Potência", pot[1]],
+      ["Torque", c.torque],
+      ["Câmbio", c.gearbox],
+      ["Tração", c.drive],
+      ["0–100 km/h", acel[1]],
+      [last[0] === "Máx." ? "Velocidade máxima" : last[0], last[1]],
+      ["Carroceria", c.body],
+      ["Ano-modelo", c.year],
+      ["Interior", c.interior],
+    ];
+    const views = [["exterior", "Exterior"], ["engine", "Motor"], ["cabin", "Interior"]];
+    dBody.innerHTML = `
+      <div class="detail__media">
+        <div class="detail__stage" data-view="${dView}">
+          ${xrayFrame(c, "d" + dIndex)}
+        </div>
+        <div class="detail__thumbs" role="tablist" aria-label="Fotos">
+          ${views.map(([v, label]) => `
+            <button type="button" role="tab" class="thumb${v === dView ? " is-active" : ""}" data-view="${v}" aria-selected="${v === dView}">
+              <span class="thumb__img thumb__img--${v}"><img src="${c.img}" alt="" style="${thumbOrigin(c, v)}"></span>
+              <span>${label}</span>
+            </button>`).join("")}
+        </div>
+      </div>
+      <div class="detail__info">
+        <p class="detail__brand">${c.brand}</p>
+        <h2 class="detail__name" id="detail-title">${c.model}</h2>
+        <p class="detail__tag">${c.tagline}</p>
+        <div class="detail__price"><span>Preço</span><b>Sob consulta</b></div>
+        <dl class="detail__specs">
+          ${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}
+        </dl>
+        <ul class="detail__checks">
+          <li>Laudo cautelar aprovado</li>
+          <li>Revisões em concessionária</li>
+          <li>Garantia Kling Car de 12 meses</li>
+        </ul>
+        <div class="detail__cta">
+          <button type="button" class="btn btn--accent" data-act="testdrive">Agendar test drive</button>
+          <button type="button" class="btn btn--light" data-act="showroom">Ver no showroom</button>
+        </div>
+      </div>`;
+    const f = dBody.querySelector(".frame");
+    f.removeAttribute("tabindex"); f.removeAttribute("role"); f.removeAttribute("aria-pressed"); f.removeAttribute("aria-label");
+    setDetailView(dView);
+  }
+
+  function thumbOrigin(c, v) {
+    if (v === "exterior") return "";
+    const [W, H] = c.xray.size, b = v === "engine" ? c.xray.engine : c.xray.cabin;
+    return `transform-origin:${pct(b[0] + b[2] / 2, W)} ${pct(b[1] + b[3] / 2, H)}`;
+  }
+
+  function setDetailView(v) {
+    dView = v;
+    const f = dBody.querySelector(".frame");
+    f.classList.toggle("xr-engine", v === "engine");
+    f.classList.toggle("xr-cabin", v === "cabin");
+    dBody.querySelectorAll(".thumb").forEach((t) => {
+      const on = t.dataset.view === v;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", String(on));
+    });
+  }
+
+  function openDetail(i) {
+    dIndex = mod(i, CARS.length);
+    dView = "exterior";
+    renderDetail();
+    if (!dlg.open) dlg.showModal();
+    document.body.style.overflow = "hidden";
+    paused = true; schedule();
+  }
+  function closeDetail() { if (dlg.open) dlg.close(); }
+  dlg.addEventListener("close", () => { document.body.style.overflow = ""; paused = false; if (!busy) { paintSlots(); schedule(); } });
+  dlg.addEventListener("click", (e) => {
+    if (e.target === dlg) return closeDetail(); // clique fora do painel
+    const t = e.target.closest(".thumb"); if (t) return setDetailView(t.dataset.view);
+    const a = e.target.closest("[data-act]"); if (!a) return;
+    const c = CARS[dIndex];
+    if (a.dataset.act === "testdrive") {
+      closeDetail();
+      select.value = `${c.brand} ${c.model}`;
+      $("#contato").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+    } else {
+      closeDetail();
+      $("#showroom").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+      setTimeout(() => goTo(dIndex), 500);
+    }
+  });
+  $("#detail-close").addEventListener("click", closeDetail);
+  $("#detail-prev").addEventListener("click", () => openDetail(dIndex - 1));
+  $("#detail-next").addEventListener("click", () => openDetail(dIndex + 1));
+  dlg.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") openDetail(dIndex + 1);
+    if (e.key === "ArrowLeft") openDetail(dIndex - 1);
+  });
+
+  // card inteiro clicável (menos o link "Tenho interesse")
+  grid.addEventListener("click", (e) => {
+    if (e.target.closest("[data-model]")) return;
+    const tile = e.target.closest(".tile");
+    if (tile) openDetail(+tile.dataset.car);
+  });
+  // "Explorar" do showroom abre a ficha do carro em destaque
+  $("#info-explore").addEventListener("click", (e) => { e.preventDefault(); openDetail(index); });
 
   /* =========================================================
      Contadores

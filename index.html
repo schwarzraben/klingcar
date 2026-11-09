@@ -88,7 +88,7 @@
         <h2 class="info__tagline" id="info-tagline">Grand tourer V12 com alma britânica.</h2>
         <ul class="specs" id="info-specs"></ul>
         <div class="info__cta">
-          <a href="#estoque" class="btn btn--dark">Explorar</a>
+          <a href="#estoque" class="btn btn--dark" id="info-explore">Explorar</a>
           <a href="#contato" class="btn btn--light">Agendar test drive</a>
         </div>
       </div>
@@ -150,6 +150,24 @@
       </form>
     </section>
   </main>
+
+  <!-- Ficha completa do carro -->
+  <dialog class="detail" id="detail" aria-labelledby="detail-title">
+    <div class="detail__panel" tabindex="-1" autofocus>
+      <div class="detail__bar">
+        <button type="button" class="detail__nav" id="detail-prev" aria-label="Carro anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button type="button" class="detail__nav" id="detail-next" aria-label="Próximo carro">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button type="button" class="detail__close" id="detail-close" aria-label="Fechar ficha">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="detail__body" id="detail-body"></div>
+    </div>
+  </dialog>
 
   <footer class="footer">
     <div class="footer__top">
