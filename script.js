@@ -12,7 +12,7 @@
     {
       id: "aston-martin", brand: "Aston Martin", model: "Vanquish", big: "VANQUISH",
       img: "assets/cars/aston-martin.webp",
-      wheels: [[126, 142, 49, 49], [551, 142, 49, 49]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [[125, 142, 40, 40], [550, 142, 40, 40]], // aro: [centroX, centroY, raioX, raioY] em px da foto
       torque: "630 Nm", gearbox: "Automático de 8 marchas", drive: "Traseira",
       xray: { size: [684, 196], engine: [45, 52, 200, 58], cabin: [285, 28, 170, 95], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "Couro semi-anilina, 2+2 lugares",
@@ -23,7 +23,7 @@
     {
       id: "bmw-m4", brand: "BMW M", model: "M4 Competition", big: "M4",
       img: "assets/cars/bmw-m4.webp",
-      wheels: [[395, 228, 33, 55], [608, 198, 16, 49]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [], // foto de frente: roda em perspectiva, não gira
       torque: "650 Nm", gearbox: "Automático M Steptronic de 8 marchas", drive: "Traseira",
       xray: { size: [640, 314], engine: [85, 95, 300, 60], cabin: [250, 25, 210, 85], cyl: 6, turbo: true, rear: false, rearSeats: true },
       interior: "Bancos concha M Carbon",
@@ -34,7 +34,7 @@
     {
       id: "ferrari-purosangue", brand: "Ferrari", model: "Purosangue", big: "PUROSANGUE",
       img: "assets/cars/ferrari-purosangue.webp",
-      wheels: [[106, 135, 39, 39], [440, 135, 39, 39]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [[106, 135, 31, 31], [441, 135, 31, 31]], // aro: [centroX, centroY, raioX, raioY] em px da foto
       torque: "716 Nm", gearbox: "Dupla embreagem de 8 marchas", drive: "Integral",
       xray: { size: [568, 175], engine: [30, 55, 190, 52], cabin: [225, 22, 220, 90], cyl: 12, turbo: false, rear: false, rearSeats: true },
       interior: "4 bancos individuais em couro",
@@ -45,7 +45,7 @@
     {
       id: "mercedes-g63", brand: "Mercedes-AMG", model: "G 63", big: "G 63",
       img: "assets/cars/mercedes-g63.webp",
-      wheels: [[113, 220, 50, 50], [497, 220, 51, 51]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [[107, 219, 34, 38], [497, 220, 38, 38]], // aro: [centroX, centroY, raioX, raioY] em px da foto
       torque: "850 Nm", gearbox: "Automático AMG Speedshift de 9 marchas", drive: "Integral 4MATIC",
       xray: { size: [618, 277], engine: [25, 100, 180, 60], cabin: [215, 35, 330, 115], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro Nappa AMG, 5 lugares",
@@ -56,7 +56,7 @@
     {
       id: "lamborghini-urus", brand: "Lamborghini", model: "Urus", big: "URUS",
       img: "assets/cars/lamborghini-urus.webp",
-      wheels: [[386, 245, 41, 57], [577, 210, 19, 51]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [], // foto de frente: roda em perspectiva, não gira
       torque: "850 Nm", gearbox: "Automático de 8 marchas", drive: "Integral",
       xray: { size: [604, 318], engine: [60, 75, 300, 70], cabin: [190, 15, 300, 95], cyl: 8, turbo: true, rear: false, rearSeats: true },
       interior: "Couro e Alcantara, 4 lugares",
@@ -67,7 +67,7 @@
     {
       id: "porsche-gt3", brand: "Porsche", model: "911 GT3", big: "GT3",
       img: "assets/cars/porsche-gt3.webp",
-      wheels: [[135, 152, 46, 46], [517, 152, 46, 46]], // [centroX, centroY, raioX, raioY] em px da foto
+      wheels: [[135, 152, 35, 35], [517, 152, 35, 35]], // aro: [centroX, centroY, raioX, raioY] em px da foto
       torque: "470 Nm", gearbox: "PDK de dupla embreagem, 7 marchas", drive: "Traseira",
       xray: { size: [652, 201], engine: [455, 58, 165, 62], cabin: [225, 25, 240, 90], cyl: 6, turbo: false, rear: true, rearSeats: false },
       interior: "Bancos full bucket em carbono",
@@ -291,10 +291,12 @@
       const k = parseFloat(w.dataset.k);
       const r = w.offsetHeight / 2 || 1;
       const deg = ((x1 - x0) / r) * (180 / Math.PI);
+      // saindo: começa na posição da foto; entrando: termina exatamente nela (sem "pulo" ao parar)
+      const [a0, a1] = phase === "out" ? [0, deg] : [-deg, 0];
       const t = (a) => `scaleX(${k}) rotate(${a}deg) scaleX(${1 / k})`;
       anims.push(w.animate([
-        { transform: t(0), filter: phase === "out" ? "blur(0px)" : "blur(1.5px)" },
-        { transform: t(deg), filter: phase === "out" ? "blur(1.5px)" : "blur(0px)" },
+        { transform: t(a0), filter: phase === "out" ? "blur(0px)" : "blur(1.5px)" },
+        { transform: t(a1), filter: phase === "out" ? "blur(1.5px)" : "blur(0px)" },
       ], opts));
     });
     return anims;

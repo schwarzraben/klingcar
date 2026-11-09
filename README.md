@@ -22,8 +22,9 @@ A cada 5 s (ou pelas setas, pontos, teclado ← → e arrastar no celular) os ca
 2. o próximo carro entra pelo outro lado e **freia** no centro, com a frente mergulhando na
    suspensão; voltando (seta ←), os carros andam de ré.
 
-As rodas são recortes da própria foto (posições em `wheels` no `script.js`) que giram por cima
-do carro.
+Os aros das rodas são recortes da própria foto (posições em `wheels` no `script.js`) que giram
+por cima do carro e terminam exatamente na posição original quando ele para. No BMW M4 e no Urus,
+fotografados de frente, a roda aparece em perspectiva, então ela não gira (só recebe desfoque).
 
 **Por dentro (raio-X):** ao passar o mouse sobre o carro (ou tocar nele no celular), a carroceria
 se abre sobre o motor e a cabine, mostrando um desenho do motor e dos bancos em laranja com
