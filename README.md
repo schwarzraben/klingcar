@@ -21,6 +21,12 @@ teclado ← → e arrastar no celular):
 2. **a plataforma gira** 60° e traz o próximo carro, enquanto o nome gigante sai e o novo entra;
 3. **o novo carro chega** e assenta na suspensão.
 
+**Por dentro (raio-X):** ao passar o mouse sobre o carro (ou tocar nele no celular), a carroceria
+se abre sobre o motor e a cabine, mostrando um desenho do motor e dos bancos em laranja com
+etiquetas da ficha técnica. O menu ao lado (Visão geral / Motor / Interior) fixa cada vista e
+pausa a troca automática. As posições do motor e da cabine de cada foto ficam em `xray` no
+`script.js`.
+
 O autoplay pausa com o mouse sobre o showroom, com a aba oculta ou fora da tela, e respeita
 `prefers-reduced-motion`.
 
