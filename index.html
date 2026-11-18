@@ -57,6 +57,7 @@ h1 .hl { color: var(--amber); -webkit-text-stroke: 0; text-shadow: 6px 6px 0 rgb
 .controls { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0; font-size: 14px; color: var(--muted); max-width: 420px; }
 .controls dt { font-family: var(--f-hud); font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
 .controls dd { margin: 0; }
+.swap { color: var(--amber); font-family: var(--f-hud); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 15px; }
 
 .missions { display: grid; gap: 14px; min-width: 0; }
 .missions h2 { margin: 0 0 2px; font-family: var(--f-hud); font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; font-size: 14px; color: var(--muted); }
@@ -131,6 +132,7 @@ h1 .hl { color: var(--amber); -webkit-text-stroke: 0; text-shadow: 6px 6px 0 rgb
       <p class="lede">Ricardo Kling é dono da KlingCar e ficou até tarde na sede da empresa. O Grupo Vasconcelos quer comprar a KlingCar à força e mandou gente armada para os andares do prédio. Três missões, três arsenais.</p>
       <div class="bank">Patrimônio do CEO<strong id="bank">R$ 0</strong></div>
       <dl class="controls" id="controls"></dl>
+      <a class="swap" id="swapLink" href="3d.html">Jogar a versão 3D (terceira pessoa)</a>
     </header>
     <div class="missions">
       <h2>Escolha a missão</h2>
@@ -143,6 +145,7 @@ h1 .hl { color: var(--amber); -webkit-text-stroke: 0; text-shadow: 6px 6px 0 rgb
 <section id="pause" class="screen dim" hidden></section>
 <section id="result" class="screen dim" hidden></section>
 
+<script src="data.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
